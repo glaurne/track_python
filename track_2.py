@@ -1,6 +1,7 @@
 import tkinter as tk
 
 class TrackCreator:
+    
     def __init__(self, root):
         self.root = root
         self.root.title("Track Creator")
@@ -42,7 +43,7 @@ class TrackCreator:
         submit_button = tk.Button(self.root, text="Submit", command=self.submit)
         submit_button.pack(side=tk.BOTTOM, padx=10, pady=10)
 
-        self.canvas.bind("<Button-1>", self.place_cone)
+        self.canvas.bind("<Button-1>", self.place_cone) #Bind the mouse click event to the canvas
 
     def update_color(self):
         self.color = self.color_var.get()
@@ -50,10 +51,11 @@ class TrackCreator:
     def update_mode(self):
         self.mode = self.mode_var.get()
 
+    
     def place_cone(self, event):
         x, y = event.x, event.y
         if self.mode == "add":
-            cone = self.canvas.create_oval(x-10, y-10, x+10, y+10, fill=self.color, outline="", tags=self.color)
+            cone = self.canvas.create_oval(x-5, y-5, x+5, y+5, fill=self.color, outline="", tags=self.color)
             self.cones.append((cone, x, y, self.color))  # Store cone ID, x, y, and color
         elif self.mode == "erase":
             items = self.canvas.find_overlapping(x-10, y-10, x+10, y+10)
