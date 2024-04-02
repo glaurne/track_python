@@ -1,0 +1,14 @@
+cones_left:
+- - 1.7667433023452759
+  - 1.4703056812286377
+cones_orange: []
+cones_orange_big: []
+cones_right:
+- - 1.1
+  - 1.0
+lap_threshold: 180
+starting_pose_front_wing:
+- 0.0
+- 0.0
+- 0.0
+tk_device: []

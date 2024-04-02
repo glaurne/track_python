@@ -1,4 +1,5 @@
 import tkinter as tk
+import yaml
 
 class TrackCreator:
     
@@ -59,13 +60,29 @@ class TrackCreator:
             self.cones.append((cone, x, y, self.color))  # Store cone ID, x, y, and color
         elif self.mode == "erase":
             items = self.canvas.find_overlapping(x-10, y-10, x+10, y+10)
-            for item in items:
+            for item in ipytems:
                 if self.canvas.gettags(item)[0] in ["orange", "yellow", "blue"]:
                     self.canvas.delete(item)
                     self.cones = [cone for cone in self.cones if cone[0] != item]
 
 
     def submit(self):
+        track_yaml = " " #declares and initializes string for storing values, later to be imported into yaml
+        blue_coord = "\nBlue cones:"
+        yellow_coord = "Yellow cones:\n"
+        orange_coord = "Orange cones:\n"
+
+        #initialize a dictionary with all the yaml entries
+        data2 = {
+            'cones_left': [],
+            'cones_orange': [],
+            'cones_orange_big':[],
+            'cones_right':[],
+            'tk_device':[],
+            'starting_pose_front_wing': [0.0, 0.0, 0.0],
+            'lap_threshold':180
+        }
+
         orange_cone = None
         for cone_id, x, y, color in self.cones:
             if color == "orange":
@@ -81,10 +98,17 @@ class TrackCreator:
                 if color == "blue":
                     print("- -", y_meters)
                     print("-", x_meters)
+                    blue_coord += "- -" + str(y_meters)# + "\n"
+                    blue_coord += "-" + str(x_meters)# + "\n" #cmd opt A
+                    #this inserts an x and y value into the conesleft array! for blue
+                    data2['cones_left'].append([y_meters, x_meters])
 
             print("\nOrange cones:")
             print("- - 0")  # Orange cone is at (0,0)
             print("-", 0)
+            orange_coord += "- - 0\n"
+            orange_coord += "- 0\n"
+
 
             print("\nYellow cones:")
             for cone_id, x, y, color in self.cones:
@@ -93,8 +117,27 @@ class TrackCreator:
                 if color == "yellow":
                     print("- -", y_meters)
                     print("-", x_meters)
+                    yellow_coord += "- -" + str(y_meters)
+                    yellow_coord += "-" + str(x_meters)
+                    data2['cones_right'].append([y_meters, x_meters])
         else:
             print("No orange cone found.")
+
+        track_yaml = blue_coord + orange_coord + yellow_coord
+
+        print(track_yaml)
+
+        #points = yaml(track_yaml)
+
+        with open('track2.yaml', 'w') as file:
+        #by using default_flow_style = false, it puts in the correct, yaml format that we want!
+            yaml.dump(data2, file, default_flow_style=False)
+
+        """ with open('track2.yaml', 'w') as file:
+            yaml.dump(track_yaml, file) """
+
+        print(open('track2.yaml').read())
+
 
 
 
